@@ -1,7 +1,8 @@
-const path = require('path'),
-  webpack = require('webpack'),
-  TerserPlugin = require('terser-webpack-plugin'),
-  MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 require('./lib/preBuild');
 
@@ -27,8 +28,8 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader'],
-        include: path.resolve(__dirname, '../'),
+        loaders: [MiniCssExtractPlugin.loader, 'css-loader'],
+        include: path.resolve(__dirname, 'src'),
       },
       {
         test: /\.(js|jsx)$/,
@@ -38,6 +39,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
       DEFAULT_EMOJI_URL: JSON.stringify(
